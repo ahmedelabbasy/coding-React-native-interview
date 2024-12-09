@@ -1,32 +1,127 @@
 # coding-React-native-interview
 
 Task Overview:
-You are tasked with developing a sophisticated mobile application using React Native that provides users with advanced features for discovering and exploring movies. The application should offer a seamless and immersive experience, leveraging cutting-edge technologies and best practices in React Native development.
+This project is a React Native application that fetches and displays popular movies from an API. It allows users to like and save movies, view details for each movie, and navigate between different screens. The app also includes a splash screen with an animated logo and a search functionality to filter movies.
 
-# Task Components:
+# Installation:
 
-### UI/UX Design:
+## Prerequisites
+Make sure you have the following installed:
 
-- Design an engaging and visually appealing user interface with screens for showing ten movies, with ability to search and filter with a child component for showing some details about the movies when clicked on the row.
+- Node.js (v14 or higher)
+- React Native CLI
+- Yarn or npm
 
-- Implement fluid animations, transitions, and gestures to enhance user interaction and experience.
+## Step-by-Step Guide
+1. Clone the repository:
 
-### API Integration:
+`git clone <repo-url>
+cd <repo-folder>`
 
-- Integrate with a API(you can use TMDb API for movie data)
+2. Install dependencies:
+You can use either npm or yarn to install the required dependencies.
 
-### State Management:
+Using Yarn:
 
-- Utilize state management to handle asynchronous actions, side effects.
+`yarn install`
 
-- Implement caching and synchronization strategies to optimize data fetching and minimize network requests.
+Using npm:
 
-### Navigation:
+`npm install`
 
-- Implement React Navigation with a drawer navigation to navigate between two screens, one home and the second movie list view. You can show what you like on the home screen.
+3. Link Native Dependencies:
+Some dependencies may require linking. If you're using React Native CLI (without Expo), you can link them with:
 
-### Performance Optimization:
+`npx react-native link`
 
-- Implement image caching and lazy loading techniques to enhance loading times and scrolling performance.
+4. Start the App:
 
-# Good Luck!
+To start the app, run the following commands:
+
+For iOS (requires Xcode):
+
+`npx react-native run-ios`
+
+For Android (requires Android Studio):
+
+`npx react-native run-android`
+
+
+### Project Structure:
+
+src/
+
+├── assets                   # Images and other static assets
+
+├── components               # Reusable components
+
+│   ├── AppError             # Error handling component
+
+│   ├── AppLoading           # Loading state component
+
+│   ├── MovieDetailsPopup    # Popup component for movie details
+
+│   ├── MovieItem            # Movie item component displayed in lists
+
+├── constants                # Constants like API keys, URLs, etc.
+
+├── helpers                  # Helper functions
+
+├── hooks                    # Custom React hooks
+
+├── navigation               # Navigation setup (e.g., DrawerNavigator, stack navigation)
+
+├── screens                  # Screen components
+
+│   ├── FavoritesScreen      # Screen displaying the user's favorite movies
+
+│   ├── HomeScreen           # Main screen showing popular movies
+
+│   ├── SplashScreen         # Splash screen with logo animation
+
+├── services                 # API calls and other external services
+
+├── store                    # Redux store, slices, and sagas
+
+│   ├── sagas                # Redux-saga for managing side effects
+
+│   ├── slices               # Redux slices for managing state
+
+├── styles                   # Global styles
+
+├── theme                    # Theme-related files for light/dark modes
+
+├── types                    # TypeScript types and interfaces
+
+├── App.tsx                   # Main app file that sets up navigation and state management
+
+├── package.json              # Project dependencies and scripts
+
+
+### Key Features:
+
+- Splash Screen: Animated logo that bounces up and down until navigating to the main screen.
+- Home Screen: Displays a list of popular movies fetched from the TMDb API with a like/unlike feature.
+- Favorites Screen: Allows the user to view and manage their favorite movies.
+- Search Functionality: Search movies based on the title.
+- Movie Details Popup: Shows detailed information about a selected movie.
+- Light/Dark Theme Support: Switch between themes with a button in the header.
+
+### Custom Hooks:
+
+## useMovies
+- Handles fetching of movie data (popular movies, favorites).
+- Handles liking/unliking of movies.
+- Can be used on both the HomeScreen and FavoritesScreen to avoid code duplication.
+
+### Store Management:
+
+## Redux Store:
+- Slices: Uses Redux Toolkit slices (movieSlice) for managing movie data, liked movies, and loading states.
+- Sagas: Handles side-effects like fetching movie data from the TMDb API.
+
+# Development Tips
+
+- Use yarn lint or npm run lint to lint your code.
+- Run yarn test or npm test to run the unit tests.
+- To enable debugging, use React Developer Tools.
