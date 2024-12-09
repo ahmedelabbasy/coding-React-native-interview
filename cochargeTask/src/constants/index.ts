@@ -1,0 +1,9 @@
+export const API_KEY = "83e89ed890cd1ce089d4dc4b4c9758b1"; // Replace with your actual API key
+export const GAP = 10;
+export const NUM_COLUMNS = 3;
+export const NUM_COLUMNS_FAVORITES = 2;
+export const API_URL = `https://api.themoviedb.org/3/movie/popular`;
+export const API_IMAGE_URL = "https://image.tmdb.org/t/p/w500";
+export const FETCH_MOVIES_API_ERROR = "Error fetching movies";
+export const UNKNOWN_ERROR = "An unknown error occurred";
+export const SEARCH_PLACEHOLDER = "Search movies...";

@@ -1,39 +1,27 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import axios from "axios";
 import {
   setPopularMovies,
   setError,
   fetchMovies,
 } from "../features/movie/movieSlice";
 import { Movie } from "../../types";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { fetchMoviesAPI } from "../../services/APIs";
+import { UNKNOWN_ERROR } from "../../constants";
 
-// API call to fetch movies
-const fetchMoviesApi = async (): Promise<Movie[]> => {
+function* fetchMoviesSaga(action: PayloadAction<number>) {
   try {
-    const response = await axios.get(
-      "https://api.themoviedb.org/3/movie/popular?api_key=83e89ed890cd1ce089d4dc4b4c9758b1"
-    );
-    return response.data.results;
-  } catch (error) {
-    throw new Error("Error fetching movies");
-  }
-};
-
-// Saga to handle movie fetching
-function* fetchMoviesSaga() {
-  try {
-    const movies: Movie[] = yield call(fetchMoviesApi); // Fetch movies
-    yield put(setPopularMovies(movies)); // Dispatch movies to Redux
+    const movies: Movie[] = yield call(fetchMoviesAPI, action.payload); 
+    yield put(setPopularMovies(movies)); 
   } catch (error: unknown) {
     if (error instanceof Error) {
-      yield put(setError(error.message)); // Dispatch error
+      yield put(setError(error.message)); 
     } else {
-      yield put(setError("An unknown error occurred"));
+      yield put(setError(UNKNOWN_ERROR));
     }
   }
 }
 
-// Watcher saga for fetching movies
 export function* movieSaga() {
-  yield takeLatest(fetchMovies.type, fetchMoviesSaga); // Trigger saga on fetchMovies action
+  yield takeLatest(fetchMovies.type, fetchMoviesSaga); 
 }

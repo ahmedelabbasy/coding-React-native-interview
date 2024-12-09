@@ -19,8 +19,12 @@ const movieSlice = createSlice({
   name: "movies",
   initialState,
   reducers: {
-    setPopularMovies: (state, action: PayloadAction<Movie[]>) => {
-      state.popularMovies = action.payload;
+    fetchMovies(state, action: PayloadAction<number>) {
+      state.isLoading = true;
+    },
+    setPopularMovies(state, action: PayloadAction<Movie[]>) {
+    state.isLoading = false;
+    state.popularMovies = [...state.popularMovies, ...action.payload]; // Append new movies
     },
     addLikedMovie: (state, action: PayloadAction<Movie>) => {
       state.likedMovies.push(action.payload);
@@ -30,10 +34,10 @@ const movieSlice = createSlice({
         (movie) => movie.id !== action.payload
       );
     },
-    setError: (state, action: PayloadAction<string>) => {
+    setError(state, action: PayloadAction<string>) {
+      state.isLoading = false;
       state.error = action.payload;
     },
-    fetchMovies: () => {},
   },
 });
 
@@ -44,5 +48,4 @@ export const {
   setError,
   fetchMovies,
 } = movieSlice.actions;
-
-export const movieReducer = movieSlice.reducer;
+export default movieSlice.reducer;

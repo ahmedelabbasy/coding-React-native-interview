@@ -1,55 +1,37 @@
-// HomeScreen.styles 
-
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 
-export const Container = styled.View`
-  flex: 1;
-  background-color: #f8f8f8;
+export const Header = styled.View`
+  width: 100%;
+  background-color: ${({ theme }) => theme.cardBackground};
   align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  height: 75px;
 `;
 
-export const Title = styled.Text`
-  font-size: 24px;
-  font-weight: bold;
-  margin: 20px;
-  color: #333;
-;`
+export const SearchIcon = styled(Ionicons)`
+  font-size: 30px;
+  color: ${({ theme }) => theme.text};
+  margin-right: 20px;
+`;
 
-export const MovieItem = styled.TouchableOpacity`
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: transparent;
-  shadow-color: rgba(0, 0, 0, 0.2);
-  shadow-offset: 0px 4px;
-  shadow-radius: 6px;
-  shadow-opacity: 0.3;
-  elevation: 5;
-;`
+export const SearchInput = styled.TextInput`
+  height: 40px;
+  border-color: gray;
+  border-width: 1px;
+  padding-left: 10px;
+  margin-left: 20px;
+  background-color: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.text};
+  placeholder-text-color: ${({ theme }) => theme.text};
+  border-radius: 10px;
+`;
 
-export const MovieImage = styled.ImageBackground`
+export const ListContainer = styled.View`
   flex: 1;
-  justify-content: flex-end;
-  align-items: center;
-  border-radius: 12px;
-  overflow: hidden;
-;`
-
-export const MovieTitle = styled.Text`
-  font-size: 14px;
-  font-weight: bold;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  padding: 5px 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-;
-`
-
-export const HeartIcon = styled(Ionicons)`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 24px;
-;
-`
+  background-color: ${({ theme }) => theme.background};
+  border-radius: 20px;
+  width: 100%;
+  `
+  

@@ -10,9 +10,12 @@ import {
   Details,
   DetailText,
   DetailLabel,
+  StarIcon,
+  Rate,
 } from "./MovieDetailsPopup.styles";
 import { Ionicons } from "@expo/vector-icons";
 import { Movie } from "../../types";
+import { API_IMAGE_URL } from "../../constants";
 
 interface MovieDetailsPopupProps {
   movie: Movie;
@@ -58,15 +61,26 @@ const MovieDetailsPopup: React.FC<MovieDetailsPopupProps> = ({
     ]).start(() => onClose());
   };
 
+    const isTopRated = movie.vote_average > 7;
+    const movieMoveAvg = movie.vote_average.toString().slice(0, 3);
+
+
   return (
     <PopupContainer style={{ opacity: fadeAnim }}>
       <PopupOverlay onPress={closePopup} />
       <PopupContent style={{ transform: [{ scale: scaleAnim }] }}>
         <Banner
           source={{
-            uri: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
+            uri: `${API_IMAGE_URL}${movie.backdrop_path}`,
           }}
         >
+          {isTopRated && (
+            <>
+              <StarIcon name={"star"} />
+              <Rate>{movieMoveAvg}</Rate>
+            </>
+          )}
+
           <CloseButton onPress={closePopup}>
             <Ionicons name="close" size={24} color="white" />
           </CloseButton>
@@ -91,4 +105,4 @@ const MovieDetailsPopup: React.FC<MovieDetailsPopupProps> = ({
   );
 };
 
-export default MovieDetailsPopup;
+export default React.memo(MovieDetailsPopup);
