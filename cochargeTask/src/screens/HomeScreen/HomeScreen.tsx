@@ -3,10 +3,8 @@ import { Animated, Dimensions, FlatList, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import {
-  addLikedMovie,
-  removeLikedMovie,
   fetchMovies,
-} from "../../store/features/movie/movieSlice";
+} from "../../store/slices/movieSlice";
 import MovieItem from "../../components/MovieItem/MovieItem";
 import { GAP, NUM_COLUMNS, SEARCH_PLACEHOLDER } from "../../constants";
 import { Movie } from "../../types";
@@ -16,17 +14,18 @@ import { Container, Title } from "../../styles";
 import MovieDetailsPopup from "../../components/MovieDetailsPopup/MovieDetailsPopup";
 import { Header, ListContainer, SearchIcon, SearchInput } from "./HomeScreen.styles";
 import { useTheme } from "styled-components/native";
+import { useMovies } from "../../hooks/useMovies";
 
   const { width } = Dimensions.get("window");
   const ITEM_WIDTH = (width - GAP * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
 
 const HomeScreen: React.FC = () => {
-  const dispatch = useDispatch();
   const { popularMovies, likedMovies, error, isLoading } = useSelector(
     (state: RootState) => state.movies
   );
 
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const dispatch = useDispatch();
+
   const [pageNumber, setPageNumber] = useState<number>(1);
   const flatListRef = useRef<FlatList>(null);
 
@@ -38,10 +37,12 @@ const HomeScreen: React.FC = () => {
 
   const theme = useTheme();
 
-  useEffect(() => {
-    // Fetch movies when the page number changes
-    dispatch(fetchMovies(pageNumber));
-  }, [dispatch, pageNumber]);
+    const {
+      selectedMovie,
+      setSelectedMovie,
+      handleMoviePress,
+      handleToggleLike,
+    } = useMovies();
 
   // Toggle search state
   const toggleSearch = () => {
@@ -61,43 +62,22 @@ const HomeScreen: React.FC = () => {
     setSearchText(""); 
   };
 
-  useEffect(() => {
-    // Initial fetch when the page number changes
-    dispatch(fetchMovies(pageNumber));
-  }, [dispatch, pageNumber]);
-
-  const handleMoviePress = (movie: Movie) => {
-    setSelectedMovie(movie);
-  };
-
-  const handleToggleLike = (movie: Movie) => {
-    const isLiked = likedMovies.some((liked) => liked.id === movie.id);
-    if (isLiked) {
-      dispatch(removeLikedMovie(movie.id));
-    } else {
-      dispatch(addLikedMovie(movie));
-    }
-  };
-
   const handleEndReached = () => {
     if (!isLoading) {
       setPageNumber((prevPage) => prevPage + 1); // Increment page number
     }
   };
 
-  const renderItem = ({ item }: { item: Movie }) => {
-    const isLiked = likedMovies.some((liked) => liked.id === item.id);
+    useEffect(() => {
+      // Fetch movies when the page number changes
+      dispatch(fetchMovies(pageNumber));
+    }, [dispatch, pageNumber]);
 
-    return (
-      <MovieItem
-        movie={item}
-        onPress={() => handleMoviePress(item)}
-        onToggleLike={() => handleToggleLike(item)}
-        isLiked={isLiked}
-        itemWidth={ITEM_WIDTH}
-      />
-    );
-  };
+    useEffect(() => {
+      // Initial fetch when the page number changes
+      dispatch(fetchMovies(pageNumber));
+    }, [dispatch, pageNumber]);
+
   // Keep the scroll position after new data is added
   useEffect(() => {
     if (flatListRef.current && pageNumber > 1) {
@@ -109,6 +89,21 @@ const HomeScreen: React.FC = () => {
   const filteredMovies = popularMovies.filter((movie) =>
     movie.title.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  const renderItem = ({ item }: { item: Movie }) => {
+      const isLiked = likedMovies.some((liked) => liked.id === item.id);
+
+      return (
+        <MovieItem
+          movie={item}
+          onPress={() => handleMoviePress(item)}
+          onToggleLike={() => handleToggleLike(item)}
+          isLiked={isLiked}
+          itemWidth={ITEM_WIDTH}
+        />
+      );
+    };
+
 
   if (error) {
     return <AppError error={error} />;

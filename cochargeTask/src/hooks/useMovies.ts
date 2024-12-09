@@ -1,39 +1,27 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef } from "react";
-import { fetchMovies } from "../store/features/movie/movieSlice";
+import { addLikedMovie, removeLikedMovie } from "../store/slices/movieSlice";
 import { RootState } from "../store";
-import { Animated } from "react-native";
+import { Movie } from "../types";
 
 export const useMovies = () => {
   const dispatch = useDispatch();
-  const { popularMovies, likedMovies, error, isLoading } = useSelector(
-    (state: RootState) => state.movies
-  );
 
-  const fadeAnimations = useRef<Animated.Value[]>([]).current;
+    const { likedMovies } = useSelector((state: RootState) => state.movies);
+    const [selectedMovie, setSelectedMovie] = React.useState<Movie | null>(null);
 
-  useEffect(() => {
-    dispatch(fetchMovies());
-  }, [dispatch]);
+      const handleMoviePress = (movie: Movie) => {
+        setSelectedMovie(movie);
+      };
 
-  useEffect(() => {
-    if (popularMovies.length > 0) {
-      while (fadeAnimations.length < popularMovies.length) {
-        fadeAnimations.push(new Animated.Value(0));
-      }
+      const handleToggleLike = (movie: Movie) => {
+        const isLiked = likedMovies.some((liked) => liked.id === movie.id);
+        if (isLiked) {
+          dispatch(removeLikedMovie(movie.id));
+        } else {
+          dispatch(addLikedMovie(movie));
+        }
+      };
 
-      const animations = fadeAnimations.map((anim) =>
-        Animated.timing(anim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        })
-      );
-
-      Animated.sequence(animations).start();
-    }
-  }, [popularMovies, fadeAnimations]);
-
-  return { popularMovies, likedMovies, error, isLoading, fadeAnimations };
+  return { selectedMovie, setSelectedMovie, handleMoviePress, handleToggleLike };
 };

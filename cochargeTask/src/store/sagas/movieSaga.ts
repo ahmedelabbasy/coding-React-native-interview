@@ -3,7 +3,7 @@ import {
   setPopularMovies,
   setError,
   fetchMovies,
-} from "../features/movie/movieSlice";
+} from "../slices/movieSlice";
 import { Movie } from "../../types";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { fetchMoviesAPI } from "../../services/APIs";
